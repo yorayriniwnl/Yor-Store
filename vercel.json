@@ -1,0 +1,25 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "prisma generate && next build",
+  "installCommand": "npm install",
+  "functions": {
+    "app/api/scrape/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/search/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/product/[slug]/route.ts": {
+      "maxDuration": 15
+    },
+    "app/api/product/[slug]/history/route.ts": {
+      "maxDuration": 15
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/scrape",
+      "schedule": "*/30 * * * *"
+    }
+  ]
+}

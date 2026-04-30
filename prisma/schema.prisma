@@ -1,0 +1,107 @@
+// =============================================================
+//  BasketBest — Prisma Schema
+//  DB: Supabase PostgreSQL
+//  Generator: prisma-client-js
+// =============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")   // pooled (PgBouncer) — runtime queries
+  directUrl = env("DIRECT_URL")     // direct — migrations & introspection
+}
+
+// =============================================================
+//  ENUMS
+// =============================================================
+
+enum Category {
+  FRUITS_VEGETABLES
+  DAIRY_EGGS
+  MEAT_SEAFOOD
+  BAKERY
+  BEVERAGES
+  SNACKS
+  PANTRY_STAPLES
+  FROZEN
+  PERSONAL_CARE
+  HOUSEHOLD
+  BABY_KIDS
+  OTHER
+}
+
+// =============================================================
+//  MODELS
+// =============================================================
+
+model Product {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  category  Category @default(OTHER)
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  prices    Price[]
+
+  @@index([slug])
+  @@index([category])
+  @@map("products")
+}
+
+model Store {
+  id        String  @id @default(cuid())
+  name      String  @unique
+  baseUrl   String
+  logoUrl   String?
+  isScraped Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  prices    Price[]
+
+  @@map("stores")
+}
+
+model Price {
+  id            String   @id @default(cuid())
+  price         Decimal  @db.Decimal(10, 2)
+  originalPrice Decimal? @db.Decimal(10, 2)   // null = no active discount
+  unit          String                          // e.g. "500g", "1L", "dozen"
+  inStock       Boolean  @default(true)
+  affiliateUrl  String?
+  scrapedAt     DateTime @default(now())
+
+  // Foreign keys
+  productId     String
+  storeId       String
+
+  // Relations
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  store         Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  // Computed helper: only one active price record per product+store combo
+  @@unique([productId, storeId])
+  @@index([productId])
+  @@index([storeId])
+  @@index([scrapedAt])
+  @@index([inStock])
+  @@map("prices")
+}
+
+model SearchHistory {
+  id          String   @id @default(cuid())
+  query       String
+  resultCount Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([query])
+  @@index([createdAt])
+  @@map("search_history")
+}
