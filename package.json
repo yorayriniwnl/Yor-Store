@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "design:check": "node scripts/check-design.mjs",
     "start": "next start",
     "lint": "next lint",
     "db:push": "prisma db push",

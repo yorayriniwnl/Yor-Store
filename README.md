@@ -1,92 +1,68 @@
-# 🧺 BasketBest
+# YOR STORE // price signal
 
-Compare grocery prices across **Blinkit, Zepto, BigBasket, Amazon Fresh & Instamart** in real-time.
+<p align="center"><code>query → compare → inspect → continue</code></p>
 
-## Project Structure
+YOR STORE is a Next.js reference surface for comparing grocery prices across configured store connectors. It stores product snapshots, exposes search/product/history routes, and keeps affiliate continuation separate from the comparison step.
 
-```
-BasketBest/
-├── app/
-│   ├── page.tsx                          ← Home page
-│   ├── layout.tsx                        ← Root layout
-│   ├── globals.css                       ← Global styles
-│   ├── not-found.tsx                     ← 404 page
-│   ├── search/
-│   │   ├── page.tsx                      ← Search results page
-│   │   ├── layout.tsx                    ← Suspense wrapper
-│   │   └── loading.tsx                   ← Search loading skeleton
-│   ├── product/[slug]/
-│   │   ├── page.tsx                      ← Product detail page
-│   │   ├── loading.tsx                   ← Product loading skeleton
-│   │   └── PriceHistoryChart.tsx         ← Recharts price chart
-│   └── api/
-│       ├── search/route.ts               ← GET /api/search?q=
-│       ├── scrape/route.ts               ← POST /api/scrape
-│       └── product/[slug]/
-│           ├── route.ts                  ← GET /api/product/:slug
-│           └── history/route.ts          ← GET /api/product/:slug/history
-├── components/
-│   ├── SearchBar.tsx                     ← Debounced search with recent history
-│   ├── ProductCard.tsx                   ← Price card with Buy Now button
-│   ├── StoreBadge.tsx                    ← Colour-coded store pill
-│   └── PriceSkeleton.tsx                 ← Loading skeleton grid
-├── scrapers/
-│   ├── base.ts                           ← Abstract base scraper
-│   ├── blinkit.ts                        ← Blinkit scraper
-│   ├── bigbasket.ts                      ← BigBasket scraper
-│   └── manager.ts                        ← Runs all scrapers in parallel
-├── lib/
-│   └── db.ts                             ← Prisma singleton client
-├── prisma/
-│   ├── schema.prisma                     ← Database schema
-│   └── seed.ts                           ← Seed stores + sample products
-├── .env.example                          ← All required environment variables
-├── vercel.json                           ← Vercel cron job config
-├── DEPLOYMENT_AND_REVIEW.md              ← Full deployment guide
-├── next.config.ts
-├── tailwind.config.ts
-├── tsconfig.json
-└── package.json
+## Evidence contract
+
+| Surface | State | Boundary |
+| --- | --- | --- |
+| Search and product UI | `DEMO` | A portfolio-scale client for inspecting the comparison workflow. |
+| Prisma data model | `EXPERIMENTAL` | Requires a configured database and generated client. |
+| Blinkit / BigBasket connectors | `EXPERIMENTAL` | Connector behavior depends on source availability and should be probed before claims. |
+| Zepto / Amazon Fresh / Instamart | `PLANNED` | Shown as destinations in the registry; not evidence of a live connector. |
+| Local production build | `VERIFIED` | Packaging check only; it does not prove price freshness or checkout success. |
+| Price provenance | `REPORTED` | The UI can display stored source/unit data; freshness and accuracy remain data-path concerns. |
+
+The visual source of truth is [`design/yor-tokens.json`](./design/yor-tokens.json). Check it with `npm run design:check`.
+
+## Workflow
+
+1. Search for a specific item and unit.
+2. Compare returned store prices, stock flags, and history where available.
+3. Continue to an external destination only after inspecting the recorded signal.
+
+The site does not guarantee that a displayed price is current, that a product is in stock, or that an affiliate destination will complete an order.
+
+## Repository map
+
+```text
+app/                         Next.js App Router pages and API routes
+components/SearchBar.tsx    Search input, recent-query behavior, navigation
+components/ProductCard.tsx  Product comparison and continuation card
+scrapers/                   Configured connector implementations
+lib/db.ts                   Prisma client boundary
+prisma/schema.prisma        Product, store, price, and history model
 ```
 
-## Quick Start
+## Run locally
 
-### 1. Install dependencies
 ```bash
 npm install
-```
-
-### 2. Set up environment variables
-```bash
-cp .env.example .env.local
-# Fill in your Supabase, Upstash, and other values
-```
-
-### 3. Set up the database
-```bash
 npm run db:generate
 npm run db:push
 npm run db:seed
-```
-
-### 4. Run the development server
-```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Open `http://localhost:3000`. Copy `.env.example` to `.env.local` and configure the database/cache values before running persistence or scraper workflows.
 
-## Tech Stack
+## Verification
 
-| Layer | Technology |
-|---|---|
-| Frontend | Next.js 14 (App Router), Tailwind CSS, Recharts |
-| Backend | Next.js API Routes |
-| Database | PostgreSQL via Supabase + Prisma ORM |
-| Cache | Redis via Upstash |
-| Scrapers | Fetch-based (Blinkit, BigBasket) |
-| Deployment | Vercel |
+```bash
+npm run design:check
+npm run build
+```
 
-## Deployment
+Run an environment-backed check for the search route, Prisma persistence, scraper sources, affiliate links, and deployed runtime before presenting the app as a live price-comparison service.
 
-See `DEPLOYMENT_AND_REVIEW.md` for full step-by-step deployment instructions.
+## YOR visual system
+
+- void `#000000`, graphite `#050505`
+- crimson `#e84b4b`, deep crimson `#671515`, signal `#ff8a7f`
+- warm white `#f5eaea`, muted gray `#c4c4c4`
+- field gradient `#671515` → `#8c1616` → `#2a0505`
+- grid/noise texture, mono annotations, serif hierarchy, and visible source states
+
+This keeps the shopping decision legible: a product, a stored price, and a live checkout are three different claims.

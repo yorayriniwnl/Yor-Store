@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
-  title: "BasketBest — Compare Grocery Prices",
-  description: "Find the cheapest grocery prices across Blinkit, Zepto, BigBasket, Amazon Fresh and Instamart instantly.",
+  title: "YOR STORE // price signal",
+  description: "Compare grocery price signals across stores, inspect provenance, and choose where to continue.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

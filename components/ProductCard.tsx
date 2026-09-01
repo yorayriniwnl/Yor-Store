@@ -41,23 +41,23 @@ export default function ProductCard({ product, isCheapest }: ProductCardProps) {
       : null;
 
   return (
-    <div className="group relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-100 transition-all duration-200 overflow-hidden flex flex-col">
+    <div className="yor-product-card group relative overflow-hidden flex flex-col">
       {/* Cheapest badge */}
       {isCheapest && (
-        <div className="absolute top-3 left-3 z-10 bg-emerald-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
+        <div className="yor-badge-cheapest absolute top-3 left-3 z-10 text-xs font-bold px-2.5 py-1 flex items-center gap-1">
           <span>🏆</span> Cheapest
         </div>
       )}
 
       {/* Discount badge */}
       {discountPct && discountPct > 0 && (
-        <div className="absolute top-3 right-3 z-10 bg-rose-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-sm">
+        <div className="yor-badge-discount absolute top-3 right-3 z-10 text-xs font-bold px-2.5 py-1">
           -{discountPct}%
         </div>
       )}
 
       {/* Image */}
-      <div className="relative h-44 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+      <div className="yor-product-image relative h-44 overflow-hidden">
         {product.imageUrl ? (
           <Image
             src={product.imageUrl}
@@ -89,7 +89,7 @@ export default function ProductCard({ product, isCheapest }: ProductCardProps) {
         {/* Price row */}
         <div className="flex items-center justify-between pt-3 border-t border-gray-50">
           <div>
-            <span className="text-xl font-bold text-emerald-600">
+            <span className="yor-product-price text-xl font-bold">
               ₹{cheapest.price.toFixed(2)}
             </span>
             {maxPrice && maxPrice > cheapest.price && (
@@ -105,14 +105,14 @@ export default function ProductCard({ product, isCheapest }: ProductCardProps) {
                 href={cheapest.affiliateUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold px-3 py-2 rounded-xl transition-colors"
+                className="yor-buy-button text-xs font-semibold px-3 py-2 transition-colors"
               >
                 Buy Now
               </a>
             )}
             <Link
               href={`/product/${product.slug}`}
-              className="text-xs text-emerald-600 hover:text-emerald-700 font-medium border border-emerald-200 hover:border-emerald-300 px-3 py-2 rounded-xl transition-colors"
+              className="yor-compare-button text-xs font-medium px-3 py-2 transition-colors"
             >
               Compare
             </Link>

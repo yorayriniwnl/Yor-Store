@@ -81,13 +81,13 @@ export default function SearchBar({
   const isLarge = size === "large";
 
   return (
-    <div ref={wrapperRef} className="relative w-full">
+    <div ref={wrapperRef} className="yor-search-wrap">
       <div
-        className={`flex items-center bg-white border-2 rounded-2xl transition-all duration-200 shadow-sm
-          ${showDropdown && filtered.length > 0 ? "border-emerald-400 shadow-emerald-100 shadow-md" : "border-gray-200 hover:border-emerald-300"}`}
+        className={`yor-search-field transition-all duration-200
+          ${showDropdown && filtered.length > 0 ? "border-[#ff8a7f]" : ""}`}
       >
         {/* Search icon */}
-        <div className={`pl-4 text-gray-400 flex-shrink-0 ${isLarge ? "pl-5" : ""}`}>
+        <div className={`yor-search-icon flex-shrink-0 ${isLarge ? "pl-5" : "pl-4"}`}>
           <svg
             className={isLarge ? "w-6 h-6" : "w-5 h-5"}
             fill="none"
@@ -115,7 +115,7 @@ export default function SearchBar({
           }}
           onFocus={() => setShowDropdown(true)}
           onKeyDown={handleKeyDown}
-          className={`flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-400 font-medium
+          className={`yor-search-input font-medium
             ${isLarge ? "px-4 py-5 text-lg" : "px-3 py-3.5 text-base"}`}
         />
 
@@ -123,7 +123,7 @@ export default function SearchBar({
         {value && (
           <button
             onClick={() => { setValue(""); inputRef.current?.focus(); }}
-            className="px-2 text-gray-300 hover:text-gray-500 transition-colors"
+            className="px-2 text-[#c4c4c4] hover:text-[#f5eaea] transition-colors"
             aria-label="Clear"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,7 +135,7 @@ export default function SearchBar({
         {/* Search button */}
         <button
           onClick={() => navigate(value)}
-          className={`bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-colors m-1.5 flex items-center gap-2
+          className={`yor-search-button transition-colors m-1.5 flex items-center gap-2
             ${isLarge ? "px-6 py-3.5 text-base" : "px-4 py-2.5 text-sm"}`}
         >
           Search
@@ -144,15 +144,15 @@ export default function SearchBar({
 
       {/* Recent searches dropdown */}
       {showDropdown && filtered.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl border border-gray-100 shadow-xl z-50 overflow-hidden">
-          <div className="px-4 pt-3 pb-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+        <div className="yor-search-menu overflow-hidden">
+          <div className="px-4 pt-3 pb-1 text-xs font-semibold text-[#c4c4c4] uppercase tracking-wider">
             Recent searches
           </div>
           {filtered.map((q) => (
             <button
               key={q}
               onMouseDown={() => { setValue(q); navigate(q); }}
-              className="w-full text-left px-4 py-2.5 flex items-center gap-3 hover:bg-emerald-50 transition-colors text-gray-700 text-sm"
+              className="w-full text-left px-4 py-2.5 flex items-center gap-3 hover:bg-[#671515] transition-colors text-[#c4c4c4] text-sm"
             >
               <svg className="w-4 h-4 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />

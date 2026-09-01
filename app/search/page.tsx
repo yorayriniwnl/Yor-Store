@@ -146,7 +146,7 @@ export default function SearchPage() {
               {loading
                 ? "Searching…"
                 : `${sorted.length} result${sorted.length !== 1 ? "s" : ""} for`}{" "}
-              {!loading && <span className="text-emerald-600">"{query}"</span>}
+              {!loading && <span className="text-emerald-600">&quot;{query}&quot;</span>}
             </h1>
             {fromCache && !loading && (
               <p className="text-xs text-gray-400 mt-0.5">Results from cache</p>
@@ -211,7 +211,7 @@ export default function SearchPage() {
               No results found
             </h2>
             <p className="text-gray-500 mb-2">
-              We couldn't find "<strong>{query}</strong>" anywhere.
+              We couldn&apos;t find &quot;<strong>{query}</strong>&quot; anywhere.
             </p>
             <p className="text-gray-400 text-sm mb-8">
               Try a different search term or check your spelling.
