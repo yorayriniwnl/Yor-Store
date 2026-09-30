@@ -1,0 +1,58 @@
+name: Refresh dependency lock
+
+on:
+  push:
+    branches:
+      - fix/production-scrape-guard-20261001
+    paths:
+      - ".github/workflows/refresh-lock.yml"
+      - "package.json"
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/yor_store
+      DIRECT_URL: postgresql://postgres:postgres@127.0.0.1:5432/yor_store
+      NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
+      CRON_SECRET: ci-only-secret
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/production-scrape-guard-20261001
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Regenerate lockfile
+        run: |
+          rm -f package-lock.json
+          npm install --package-lock-only
+      - name: Install validated tree
+        run: npm ci
+      - name: Production dependency audit
+        run: npm audit --omit=dev --audit-level=high
+      - name: Scrape authorization contract
+        run: npm run security:check
+      - name: Design contract
+        run: npm run design:check
+      - name: Generate Prisma client
+        run: npm run db:generate
+      - name: Production build
+        run: npm run build
+      - name: Commit validated lockfile
+        shell: bash
+        run: |
+          if git diff --quiet -- package.json package-lock.json; then
+            echo "No dependency update required"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          git commit -m "deps: refresh validated Yor Store lockfile"
+          git push origin HEAD:fix/production-scrape-guard-20261001
