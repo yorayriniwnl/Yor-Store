@@ -19,6 +19,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { redis } from "@/lib/redis";
 import { ScraperManager } from "@/scrapers/manager";
+import { isCronRequestAuthorised } from "@/lib/cron-auth.mjs";
 
 // ------------------------------------------------------------------
 // Redis singleton
@@ -42,16 +43,15 @@ const ScrapeBodySchema = z.object({
 });
 
 // ------------------------------------------------------------------
-// Optional: cron-job secret guard
+// Cron-job secret guard
 // ------------------------------------------------------------------
 
 function isAuthorised(request: NextRequest): boolean {
-  // Skip auth check when no secret is configured (dev / open deployments)
-  const secret = process.env.CRON_SECRET;
-  if (!secret) return true;
-
-  const authHeader = request.headers.get("authorization");
-  return authHeader === `Bearer ${secret}`;
+  return isCronRequestAuthorised({
+    authorization: request.headers.get("authorization"),
+    secret: process.env.CRON_SECRET,
+    nodeEnv: process.env.NODE_ENV,
+  });
 }
 
 // ------------------------------------------------------------------
