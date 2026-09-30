@@ -59,11 +59,11 @@ interface ProductDetailDto {
 }
 
 // ------------------------------------------------------------------
-// Route params type (Next.js 14 App Router)
+// Route params type (Next.js 16 App Router)
 // ------------------------------------------------------------------
 
 interface RouteContext {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 // ------------------------------------------------------------------
@@ -91,7 +91,7 @@ export async function GET(
   _request: NextRequest,
   { params }: RouteContext,
 ): Promise<NextResponse> {
-  const { slug } = params;
+  const { slug } = await params;
 
   if (!slug || typeof slug !== "string") {
     return NextResponse.json({ error: "Invalid slug." }, { status: 400 });
