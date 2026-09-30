@@ -56,11 +56,12 @@ async function getHistory(slug: string): Promise<StoreHistory[]> {
 export default async function ProductPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
   const [product, history] = await Promise.all([
-    getProduct(params.slug),
-    getHistory(params.slug),
+    getProduct(slug),
+    getHistory(slug),
   ]);
 
   if (!product) notFound();
