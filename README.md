@@ -55,7 +55,7 @@ npm run design:check
 npm run build
 ```
 
-Run an environment-backed check for the search route, Prisma persistence, scraper sources, affiliate links, and deployed runtime before presenting the app as a live price-comparison service.
+Run an environment-backed check for the search route, Prisma persistence, scraper sources, affiliate links, and deployed runtime before presenting the app as a live price-comparison service. Production scrape requests require `CRON_SECRET`; the route rejects requests when that secret is missing in production.
 
 ## YOR visual system
 
