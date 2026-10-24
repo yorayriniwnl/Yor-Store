@@ -14,6 +14,23 @@
 
 YOR STORE is a Next.js reference surface for comparing grocery prices across configured store connectors. It stores product snapshots, exposes search/product/history routes, and keeps affiliate continuation separate from the comparison step.
 
+<!-- YOR REDLINE / EXPERIENCE V2 -->
+
+<a id="system-map"></a>
+## System map
+
+<div align="center"><picture><source media="(max-width: 600px)" srcset="docs/yor-redline-system-mobile.svg"/><img src="docs/yor-redline-system.svg" width="100%" alt="Grocery price comparisons: Search groceries to Inspect snapshots to Compare history to Continue to seller"/></picture></div>
+
+| Project signal | Documented scope |
+| :--- | :--- |
+| **Current maturity** | REFERENCE / DEMO |
+| **Technical focus** | Next.js comparison UI, price snapshot models, search routes, and affiliate continuation. |
+| **Evidence boundary** | Configured connectors and sample data do not guarantee live pricing or purchase fulfillment. |
+
+**Navigate:** [Evidence contract](#evidence-contract) · [Workflow](#workflow) · [Repository map](#repository-map) · [Run locally](#run-locally) · [Verification](#verification) · [YOR visual system](#yor-visual-system)
+
+<!-- END YOR REDLINE / EXPERIENCE V2 -->
+
 ## Evidence contract
 
 | Surface | State | Boundary |
